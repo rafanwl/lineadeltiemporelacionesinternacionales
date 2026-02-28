@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Relaciones Internacionales — Línea del Tiempo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:        #F5F0E8;
+  --bg2:       #EDE7D9;
+  --ink:       #1A1510;
+  --ink2:      #3D3528;
+  --ink3:      #6B5F4E;
+  --ink4:      #A09280;
+  --gold:      #8B6914;
+  --gold2:     #C49A2A;
+  --gold-lt:   #F0D98A;
+  --accent:    #5B4A8A;
+  --accent-lt: #8B7ABF;
+  --border:    rgba(139,105,20,0.18);
+  --border2:   rgba(26,21,16,0.1);
+  --panel-bg:  #FDFAF4;
+  --shadow:    0 8px 40px rgba(26,21,16,0.12), 0 2px 8px rgba(26,21,16,0.06);
+}
+
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  background:var(--bg);
+  font-family:'DM Sans',sans-serif;
+  cursor:none;
+  user-select:none;
+  color:var(--ink);
+}
+
+/* Fine linen texture */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.028;pointer-events:none;z-index:300;mix-blend-mode:multiply;
+}
+
+/* Subtle vignette */
+body::after{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(180,165,140,0.18) 100%);
+  pointer-events:none;z-index:299;
+}
+
+canvas{position:fixed;inset:0;pointer-events:none;z-index:1;}
+
+/* ═══ HEADER ═══ */
+header{
+  position:fixed;top:0;left:0;right:0;
+  padding:24px 56px 0;z-index:80;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  border-bottom:1px solid transparent;
+  transition:border-color 0.8s;
+}
+header.lit{ border-color:var(--border);}
+
+.header-title{
+  font-family:'Playfair Display',serif;
+  font-weight:400;font-size:clamp(1.1rem,2.1vw,1.75rem);
+  letter-spacing:0.06em;
+  color:rgba(26,21,16,0.2);
+  text-transform:uppercase;
+  transition:color 1.2s;
+}
+.header-title.lit{color:var(--ink);}
+.header-sub{
+  font-size:0.62rem;letter-spacing:0.32em;
+  color:rgba(26,21,16,0.18);
+  text-transform:uppercase;margin-top:5px;
+  transition:color 1.2s;
+}
+.header-sub.lit{color:var(--ink3);}
+
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.progress-num{
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem;font-weight:400;
+  color:rgba(26,21,16,0.12);display:block;line-height:1;
+  transition:color 0.6s;
+}
+.progress-num.lit{color:var(--gold);}
+.progress-label{
+  font-size:0.58rem;letter-spacing:0.22em;
+  color:rgba(26,21,16,0.28);text-transform:uppercase;
+}
+
+.btn-reset{
+  display:none;background:transparent;
+  border:1px solid var(--border);
+  color:var(--ink3);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;
+  padding:7px 16px;cursor:pointer;
+  border-radius:2px;
+  transition:all 0.3s;
+}
+.btn-reset:hover{border-color:var(--gold);color:var(--gold);}
+.btn-reset.visible{display:block;}
+
+/* ═══ SCENE ═══ */
+.scene{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;}
+.timeline-outer{
+  position:relative;
+  width:min(1100px,90vw);
+  height:420px;
+  display:flex;align-items:center;
+  margin-top:40px;
+}
+
+/* ═══ RAIL ═══ */
+.rail-wrap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;}
+.rail-bg{
+  width:100%;height:100%;
+  background:rgba(26,21,16,0.1);
+  border-radius:1px;
+  position:relative;overflow:visible;
+}
+.rail-fill{
+  position:absolute;top:0;left:0;height:100%;width:0%;
+  border-radius:1px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),#D4A82A);
+  box-shadow:0 0 4px rgba(139,105,20,0.5),0 0 14px rgba(139,105,20,0.3),0 0 32px rgba(196,154,42,0.15);
+  transition:width 0.05s linear;
+}
+.rail-head{
+  position:absolute;top:50%;left:0%;
+  transform:translate(-50%,-50%);
+  width:12px;height:12px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0%,var(--gold2) 50%,transparent 70%);
+  box-shadow:0 0 10px var(--gold2),0 0 28px rgba(196,154,42,0.5);
+  opacity:0;pointer-events:none;transition:left 0.05s linear;
+}
+
+/* ═══ DECADE NODES ═══ */
+.decade-node{
+  position:absolute;top:50%;transform:translateX(-50%);
+  z-index:20;cursor:pointer;
+}
+.dec-dot{
+  position:absolute;top:0;left:50%;
+  transform:translate(-50%,-50%);
+  width:11px;height:11px;border-radius:50%;
+  background:rgba(26,21,16,0.08);
+  border:1.5px solid rgba(26,21,16,0.15);
+  transition:all 0.5s ease;
+}
+.decade-node.revealed .dec-dot{
+  background:var(--gold);border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(139,105,20,0.15),0 0 12px rgba(139,105,20,0.35);
+}
+.decade-node.active .dec-dot{
+  transform:translate(-50%,-50%) scale(1.5);
+  background:var(--gold2);border-color:var(--gold2);
+  box-shadow:0 0 0 5px rgba(196,154,42,0.2),0 0 20px rgba(139,105,20,0.5);
+}
+.decade-node.revealed::after{
+  content:'';position:absolute;top:0;left:50%;
+  transform:translate(-50%,-50%);
+  width:11px;height:11px;border-radius:50%;
+  border:1.5px solid var(--gold);
+  animation:ping-light 2.2s ease-out infinite;pointer-events:none;
+}
+@keyframes ping-light{
+  0%{transform:translate(-50%,-50%) scale(1);opacity:0.5;}
+  100%{transform:translate(-50%,-50%) scale(3.8);opacity:0;}
+}
+
+.dec-label{
+  position:absolute;
+  left:50%;transform:translateX(-50%);
+  white-space:nowrap;
+  font-family:'Playfair Display',serif;
+  font-weight:400;font-size:0.82rem;
+  letter-spacing:0.06em;
+  color:rgba(26,21,16,0);
+  transition:color 0.6s;pointer-events:none;
+}
+.decade-node.above .dec-label{bottom:calc(100% + 10px);}
+.decade-node.below .dec-label{top:calc(100% + 10px);}
+.decade-node.revealed .dec-label{color:var(--ink2);}
+.decade-node.active .dec-label{color:var(--gold);font-weight:600;}
+
+.dec-tick{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:1px;opacity:0;
+  transition:opacity 0.5s,height 0.4s;
+}
+.decade-node.above .dec-tick{bottom:4px;background:linear-gradient(0deg,var(--gold),transparent);height:0;}
+.decade-node.below .dec-tick{top:4px;background:linear-gradient(180deg,var(--gold),transparent);height:0;}
+.decade-node.above.revealed .dec-tick{opacity:0.5;height:26px;}
+.decade-node.below.revealed .dec-tick{opacity:0.5;height:26px;}
+
+/* ═══ DETAIL PANEL ═══ */
+.detail-panel{
+  position:fixed;top:0;right:0;
+  width:min(520px,46vw);height:100vh;
+  background:var(--panel-bg);
+  border-left:1px solid var(--border);
+  z-index:100;
+  transform:translateX(100%);
+  transition:transform 0.55s cubic-bezier(0.22,1,0.36,1);
+  display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(26,21,16,0.08);
+  overflow:hidden;
+}
+.detail-panel.open{transform:translateX(0);}
+
+/* Decorative top stripe */
+.panel-glow-top{
+  height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),transparent);
+  flex-shrink:0;
+}
+
+.panel-close{
+  position:absolute;top:20px;right:20px;
+  width:32px;height:32px;
+  border:1px solid var(--border2);
+  border-radius:50%;background:transparent;
+  color:var(--ink3);font-size:0.85rem;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.2s;z-index:5;
+}
+.panel-close:hover{border-color:var(--gold);color:var(--gold);background:rgba(139,105,20,0.05);}
+
+.panel-body{
+  flex:1;overflow-y:auto;
+  padding:50px 40px 40px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(139,105,20,0.2) transparent;
+}
+.panel-body::-webkit-scrollbar{width:3px;}
+.panel-body::-webkit-scrollbar-thumb{background:rgba(139,105,20,0.2);border-radius:2px;}
+
+.panel-decade{
+  font-family:'Playfair Display',serif;
+  font-weight:700;font-size:4rem;
+  color:rgba(26,21,16,0.07);
+  line-height:1;letter-spacing:-0.02em;
+  margin-bottom:4px;
+}
+.panel-decade-title{
+  font-size:0.72rem;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:28px;
+}
+
+.panel-section-label{
+  font-size:0.6rem;font-weight:600;
+  letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:10px;margin-top:26px;
+  display:flex;align-items:center;gap:10px;
+}
+.panel-section-label::after{
+  content:'';flex:1;height:1px;
+  background:var(--border2);
+}
+
+/* Events list */
+.events-list{list-style:none;display:flex;flex-direction:column;gap:3px;}
+.events-list li{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.84rem;font-weight:300;
+  color:var(--ink2);
+  padding:5px 0 5px 14px;
+  border-left:2px solid rgba(139,105,20,0.2);
+  line-height:1.5;
+  transition:color 0.2s,border-color 0.2s;
+}
+.events-list li:hover{color:var(--ink);border-color:var(--gold);}
+
+/* Key events */
+.key-events{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.key-event{
+  border:1px solid var(--border2);
+  border-radius:6px;
+  padding:12px 16px;
+  cursor:pointer;
+  transition:all 0.22s;
+  background:#fff;
+  position:relative;overflow:hidden;
+}
+.key-event::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;
+  background:var(--gold);
+  transform:scaleY(0);
+  transform-origin:bottom;
+  transition:transform 0.3s ease;
+}
+.key-event:hover{ border-color:rgba(139,105,20,0.3); box-shadow:0 2px 16px rgba(139,105,20,0.08);}
+.key-event:hover::before{transform:scaleY(1);}
+.key-event.open{ border-color:rgba(139,105,20,0.35); background:rgba(240,217,138,0.06);}
+.key-event.open::before{transform:scaleY(1);}
+
+.ke-header{display:flex;align-items:center;gap:10px;}
+.ke-year{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;font-weight:600;
+  color:var(--gold);white-space:nowrap;
+  letter-spacing:0.03em;
+}
+.ke-name{
+  font-size:0.75rem;font-weight:500;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--ink2);flex:1;
+}
+.ke-glow{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  background:var(--gold2);
+  box-shadow:0 0 0 3px rgba(196,154,42,0.2);
+  animation:ke-pulse-lt 2.5s ease infinite;
+}
+@keyframes ke-pulse-lt{
+  0%,100%{box-shadow:0 0 0 3px rgba(196,154,42,0.15);}
+  50%{box-shadow:0 0 0 6px rgba(196,154,42,0.25),0 0 12px rgba(139,105,20,0.2);}
+}
+.ke-desc{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.8rem;font-style:normal;font-weight:300;
+  color:var(--ink3);line-height:1.65;
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s ease,margin-top 0.3s,opacity 0.3s;
+  opacity:0;margin-top:0;
+}
+.key-event.open .ke-desc{max-height:200px;opacity:1;margin-top:10px;}
+.ke-arrow{
+  font-size:1.1rem;color:var(--ink4);
+  transition:transform 0.3s,color 0.2s;flex-shrink:0;
+}
+.key-event.open .ke-arrow{transform:rotate(90deg);color:var(--gold);}
+
+/* Theory tags */
+.theory-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.theory-tag{
+  font-size:0.68rem;font-weight:400;
+  letter-spacing:0.06em;
+  padding:6px 14px;border-radius:20px;
+  border:1.5px solid rgba(91,74,138,0.3);
+  color:var(--accent);
+  background:rgba(91,74,138,0.05);
+  transition:all 0.22s;cursor:default;
+}
+.theory-tag:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(91,74,138,0.1);
+}
+
+/* Panel backdrop */
+.panel-backdrop{
+  position:fixed;inset:0;z-index:90;
+  background:rgba(245,240,232,0);
+  pointer-events:none;
+  transition:background 0.5s;
+  backdrop-filter:blur(0px);
+}
+.panel-backdrop.active{
+  background:rgba(180,165,140,0.3);
+  pointer-events:auto;
+  backdrop-filter:blur(2px);
+}
+
+/* ═══ START OVERLAY ═══ */
+.start-overlay{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  z-index:200;cursor:pointer;
+  background:rgba(245,240,232,0.6);
+  backdrop-filter:blur(4px);
+}
+.start-btn{
+  width:160px;height:160px;border-radius:50%;
+  border:1.5px solid rgba(139,105,20,0.35);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+  animation:s-pulse-lt 2.8s ease infinite;
+  transition:border-color 0.3s,box-shadow 0.3s;
+  background:rgba(245,240,232,0.8);
+}
+.start-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 0 0 8px rgba(139,105,20,0.06),0 8px 32px rgba(139,105,20,0.12);
+}
+.start-icon{font-size:2rem;color:var(--gold);line-height:1;}
+.start-text{font-size:0.58rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--ink3);}
+@keyframes s-pulse-lt{
+  0%,100%{box-shadow:0 0 0 0 rgba(139,105,20,0.08);}
+  50%{box-shadow:0 0 0 20px rgba(139,105,20,0);}
+}
+
+/* ═══ RAIL HINT ═══ */
+.rail-hint{
+  position:absolute;bottom:-44px;left:50%;transform:translateX(-50%);
+  font-size:0.6rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:rgba(26,21,16,0);white-space:nowrap;pointer-events:none;
+  transition:color 1.5s 2s;
+}
+.rail-hint.visible{color:var(--ink3);}
+
+/* ═══ STATE LABEL ═══ */
+.state-label{
+  position:fixed;bottom:28px;left:56px;
+  font-family:'Playfair Display',serif;
+  font-style:italic;font-size:0.78rem;letter-spacing:0.06em;
+  color:rgba(26,21,16,0.18);z-index:50;transition:color 0.8s;
+}
+.state-label.active{color:var(--gold);}
+
+/* ═══ DRIP ═══ */
+.drip{
+  position:fixed;left:0;top:0;
+  width:10px;height:14px;border-radius:50% 50% 60% 60%;
+  background:radial-gradient(ellipse at 40% 30%,var(--gold2) 0%,var(--gold) 60%,transparent 100%);
+  box-shadow:0 0 10px var(--gold2),0 0 24px rgba(196,154,42,0.5);
+  transform:translate(-50%,-50%) scaleY(1);
+  pointer-events:none;opacity:0;z-index:60;transition:none;
+}
+
+/* ═══ REFS DRAWER ═══ */
+.refs-panel{
+  position:fixed;left:0;right:0;bottom:0;height:0;
+  background:var(--panel-bg);
+  z-index:40;
+  border-top:1px solid transparent;
+  display:flex;flex-direction:column;
+  will-change:height;user-select:none;
+  box-shadow:0 -4px 24px rgba(26,21,16,0.06);
+}
+.refs-panel.opening{transition:height 1s cubic-bezier(0.22,1,0.36,1),border-top-color 1s;}
+.refs-panel.open{border-top:1px solid var(--border);}
+
+.refs-tab{
+  position:absolute;top:-28px;left:50%;transform:translateX(-50%);
+  background:var(--panel-bg);
+  border:1px solid var(--border);border-bottom:none;
+  border-radius:6px 6px 0 0;
+  padding:6px 20px 0;
+  display:flex;align-items:center;gap:9px;
+  cursor:ns-resize;white-space:nowrap;
+  box-shadow:-2px -4px 12px rgba(26,21,16,0.05);
+}
+.refs-tab-icon{font-size:0.7rem;animation:dp-lt 2s ease infinite;}
+@keyframes dp-lt{0%,100%{opacity:0.45;}50%{opacity:1;}}
+.refs-tab-label{
+  font-size:0.58rem;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--ink3);font-weight:500;
+}
+
+.refs-drag-handle{
+  position:absolute;top:0;left:0;right:0;height:22px;
+  cursor:ns-resize;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:4px;z-index:5;transition:background 0.2s;
+}
+.refs-drag-handle:hover{background:rgba(139,105,20,0.03);}
+.refs-grip{
+  width:40px;height:3px;border-radius:2px;
+  background:rgba(139,105,20,0.18);
+  transition:background 0.25s,width 0.25s;pointer-events:none;
+}
+.refs-drag-handle:hover .refs-grip{background:rgba(139,105,20,0.45);width:56px;}
+.refs-grip-hint{
+  font-size:0.5rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:rgba(139,105,20,0);transition:color 0.25s;pointer-events:none;
+}
+.refs-drag-handle:hover .refs-grip-hint{color:var(--gold);}
+
+.refs-glow-spill{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(139,105,20,0.4),transparent);
+  pointer-events:none;opacity:0;transition:opacity 1s 0.5s;
+}
+.refs-panel.open .refs-glow-spill{opacity:1;}
+
+.refs-inner{
+  flex:1;overflow-y:auto;padding:26px 56px 20px;margin-top:22px;
+  scrollbar-width:thin;scrollbar-color:rgba(139,105,20,0.18) transparent;
+}
+.refs-inner::-webkit-scrollbar{width:3px;}
+.refs-inner::-webkit-scrollbar-thumb{background:rgba(139,105,20,0.18);border-radius:2px;}
+
+.refs-header{
+  display:flex;align-items:center;gap:18px;margin-bottom:14px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity 0.8s 0.45s,transform 0.8s 0.45s;
+}
+.refs-panel.open .refs-header{opacity:1;transform:translateY(0);}
+.refs-title{
+  font-family:'Playfair Display',serif;
+  font-weight:400;font-size:0.95rem;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--ink2);white-space:nowrap;
+}
+.refs-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.refs-content{
+  opacity:0;transform:translateY(6px);
+  transition:opacity 0.9s 0.75s,transform 0.9s 0.75s;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.8rem;font-weight:300;
+  color:var(--ink2);line-height:1.9;
+}
+.refs-panel.open .refs-content{opacity:1;transform:translateY(0);}
+.refs-placeholder{
+  font-style:italic;color:var(--ink4);
+  font-size:0.72rem;letter-spacing:0.06em;
+  border:1.5px dashed rgba(139,105,20,0.2);
+  padding:14px 20px;border-radius:6px;
+  display:inline-block;margin-bottom:8px;
+}
+
+/* ═══ CUSTOM CURSOR ═══ */
+.cursor{
+  position:fixed;width:8px;height:8px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 0 2px rgba(139,105,20,0.2),0 0 14px rgba(139,105,20,0.3);
+  pointer-events:none;z-index:400;
+  transform:translate(-50%,-50%);
+}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="cursor" id="cursor"></div>
+
+<!-- Start -->
+<div class="start-overlay" id="startOverlay">
+  <div class="start-btn">
+    <div class="start-icon">◎</div>
+    <div class="start-text">Iniciar</div>
+  </div>
+</div>
+
+<header id="mainHeader">
+  <div class="hdr-left">
+    <div class="header-title" id="hTitle">HECHOS HISTORICOS SIGLO XX y XXI</div>
+    <div class="header-sub" id="hSub">Línea del Tiempo · 1900–2026</div>
+  </div>
+  <div class="hdr-right">
+    <div>
+      <span class="progress-num" id="progNum">00</span>
+      <div class="progress-label">décadas reveladas</div>
+    </div>
+    <button class="btn-reset" id="btnReset">↺ &nbsp;Reiniciar</button>
+  </div>
+</header>
+
+<div class="panel-backdrop" id="panelBackdrop"></div>
+
+<div class="detail-panel" id="detailPanel">
+  <div class="panel-glow-top"></div>
+  <button class="panel-close" id="panelClose">✕</button>
+  <div class="panel-body" id="panelBody"></div>
+</div>
+
+<div class="scene">
+  <div class="timeline-outer" id="tlOuter">
+    <div class="rail-wrap">
+      <div class="rail-bg" id="railBg">
+        <div class="rail-fill" id="railFill"></div>
+        <div class="rail-head" id="railHead"></div>
+      </div>
+    </div>
+    <div class="rail-hint" id="railHint">Haz clic en una década para explorarla</div>
+
+    <div class="decade-node above" data-decade="1900" style="left:2%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1900s</div></div>
+    <div class="decade-node below" data-decade="1910" style="left:10%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1910s</div></div>
+    <div class="decade-node above" data-decade="1920" style="left:18%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1920s</div></div>
+    <div class="decade-node below" data-decade="1930" style="left:26%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1930s</div></div>
+    <div class="decade-node above" data-decade="1940" style="left:34%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1940s</div></div>
+    <div class="decade-node below" data-decade="1950" style="left:42%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1950s</div></div>
+    <div class="decade-node above" data-decade="1960" style="left:50%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1960s</div></div>
+    <div class="decade-node below" data-decade="1970" style="left:58%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1970s</div></div>
+    <div class="decade-node above" data-decade="1980" style="left:66%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1980s</div></div>
+    <div class="decade-node below" data-decade="1990" style="left:74%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">1990s</div></div>
+    <div class="decade-node above" data-decade="2000" style="left:82%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">2000s</div></div>
+    <div class="decade-node below" data-decade="2010" style="left:90%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">2010s</div></div>
+    <div class="decade-node above" data-decade="2020" style="left:98%"><div class="dec-tick"></div><div class="dec-dot"></div><div class="dec-label">2020s</div></div>
+  </div>
+</div>
+
+<div class="state-label" id="stateLabel">En espera...</div>
+<div class="drip" id="dripDrop"></div>
+
+<div class="refs-panel" id="refsPanel">
+  <div class="refs-glow-spill"></div>
+  <div class="refs-tab" id="refsDragTab">
+    <span class="refs-tab-icon">💧</span>
+    <span class="refs-tab-label">Referencias</span>
+  </div>
+  <div class="refs-drag-handle" id="refsDragHandle">
+    <div class="refs-grip"></div>
+    <div class="refs-grip-hint">arrastrar para redimensionar</div>
+  </div>
+  <div class="refs-inner">
+    <div class="refs-header">
+      <div class="refs-title">Referencias Bibliográficas</div>
+      <div class="refs-line"></div>
+    </div>
+    <div class="refs-content">
+
+      <!-- ═══════════════════════════════════════════════════════════
+           INSERTE AQUÍ SUS REFERENCIAS — copie y pegue su lista
+           Ejemplo:
+           <p>Apellido, N. (año). <em>Título</em>. Editorial.</p>
+           ═══════════════════════════════════════════════════════════ -->
+
+      <div class="refs-placeholder">
+        [ Díez Beatriz. (2019, December 28). 10 eventos que marcaron la década de 2010 en el mundo. https://www.bbc.com/mundo/noticias-internacional-50817503
+Agencia Informativa UDEM. (2025, February 20). Los 25 hechos que marcaron el primer cuarto del siglo XXI. https://agenciainformativaudem.com/2025/02/20/los-25-hechos-que-marcaron-el-primer-cuarto-del-siglo-xxi/
+Railton Ben. (2025, December 31). Considerando la historia: 10 eventos que marcaron el primer cuarto del siglo XXI. https://www.saturdayeveningpost.com/2025/12/considering-history-10-events-that-shaped-the-first-quarter-of-the-21st-century/
+Carrión Jorge. (2023, May 11). Cronología esencial del siglo XXI. https://www.infobae.com/cultura/2023/05/12/cronologia-esencial-del-siglo-xxi/
+Lucia blasco. (2020, January 31). Brexit | Reino Unido abandona la UE: qué pasará ahora y cuáles son los retos más urgentes para los británicos. https://www.bbc.com/mundo/noticias-internacional-51266219
+BBC News. (2022). MK-Ultra: el oscuro legado del programa secreto de la CIA destinado a encontrar formas de control mental. https://www.bbc.com/mundo/noticias-61073340
+Duroselle, J. (1975). Europa de 1815 hasta nuestros días (cap. 5, 6, 7, 8). Labor.
+Enciclopedia del Holocausto. (2025). Las leyes raciales de Nuremberg. https://encyclopedia.ushmm.org/content/es/article/the-nuremberg-race-laws
+Figues, O. (1996). La revolución rusa (cap. 1, 7). Edhasa.
+Gaddis, J. (2011). Nueva historia de la Guerra Fría (cap. 1, 2, 3, 4). Fondo de Cultura Económica.
+Tasell, N. (2019). El Crack del 29: cómo ocurrió la peor crisis en la historia de Wall Street. BBC News. https://www.bbc.com/mundo/noticias-50189619
+Zorgbibe, Charles. (1997). Historia de las relaciones internacionales. Alianza.
+Zubok, V. (2019). Un imperio fallido (cap. 1, 2). Titivillus.
+]<br>
+        <small style="font-size:0.62rem;opacity:0.7;">REFERENCIAS BIBLIOGRÁFICAS</small>
+      </div>
+
+      <!-- FIN BLOQUE DE REFERENCIAS -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  DATA — idéntica al diseño oscuro
+// ═══════════════════════════════════════════════════════════════════
+const DECADES = {
+  "1900": {
+    title: "El Orden Imperial",
+    events: ["Guerra ruso-japonesa (1904–1905)","Revolución rusa de 1905","Construcción del Canal de Panamá (1904)"],
+    keyEvents: [
+      { year:"1904–05", name:"Guerra Ruso-Japonesa", desc:"Japón derrota a Rusia por el control de territorios en Asia. La derrota debilita al régimen zarista y anuncia el surgimiento de potencias no europeas." },
+      { year:"1905", name:"Revolución Rusa (1905)", desc:"Crisis social y derrotas militares provocan protestas que obligan al zar a aceptar reformas políticas limitadas." },
+      { year:"1904", name:"Canal de Panamá", desc:"Estados Unidos impulsa la obra para controlar una ruta comercial y militar clave entre los dos océanos." }
+    ],
+    theories: ["Imperialismo moderno (Lenin, 1916)","Constitucionalismo liberal en crisis","Socialismo revolucionario vs. zarismo","Panamericanismo y hegemonía de EE. UU."]
+  },
+  "1910": {
+    title: "La Gran Guerra y sus Secuelas",
+    events: ["Primera Guerra Mundial (1914–1918)","Revolución Bolchevique (1917)","Guerra Civil Rusa (1917–1922)","Sociedad de Naciones (1919)","Tratado de Versalles (1919)"],
+    keyEvents: [
+      { year:"1914–18", name:"Primera Guerra Mundial", desc:"Conflicto entre grandes potencias por rivalidades políticas y territoriales que destruye imperios europeos y reordena el mapa mundial." },
+      { year:"1917", name:"Revolución Bolchevique", desc:"Movimiento comunista toma el poder y transforma radicalmente el sistema político ruso, creando el primer Estado socialista." },
+      { year:"1919", name:"Tratado de Versalles", desc:"Acuerdo de paz que castiga a Alemania con sanciones territoriales, económicas y militares — sembrando las semillas de la siguiente guerra." },
+      { year:"1919", name:"Sociedad de Naciones", desc:"Primera organización multilateral permanente, creada para resolver conflictos internacionales sin violencia. Fracasa ante la ausencia de EE. UU." }
+    ],
+    theories: ["Comunismo / Marxismo-Leninismo","Autodeterminación de los pueblos (Wilson)","Idealismo liberal en RI → SDN","Reacción nacionalista vs. Versalles"]
+  },
+  "1920": {
+    title: "Ascenso de los Totalitarismos",
+    events: ["Marcha sobre Roma — ascenso del fascismo (1922)","Consolidación de la URSS (1922)","Gran Depresión (1929)"],
+    keyEvents: [
+      { year:"1922", name:"Marcha sobre Roma", desc:"Movimiento fascista liderado por Benito Mussolini toma el poder en Italia. Primer modelo de Estado totalitario europeo de posguerra." },
+      { year:"1922", name:"Consolidación de la URSS", desc:"Se establece un Estado socialista centralizado bajo un solo partido, el primero de su tipo en el sistema internacional." },
+      { year:"1929", name:"Gran Depresión", desc:"Crisis financiera iniciada en EE. UU. que provoca colapso económico mundial y demuestra la interdependencia global." }
+    ],
+    theories: ["Fascismo (Mussolini al poder)","Totalitarismo (modelos soviético y fascista)","Estalinismo en la URSS","Bases del keynesianismo tras 1929 (Keynes)"]
+  },
+  "1930": {
+    title: "La Marcha hacia la Guerra",
+    events: ["Leyes de Nuremberg (1936)","Larga Marcha de Mao Zedong (1934)","Gran Purga Soviética (1937)","Invasión a Polonia (1939) → inicio de la Segunda Guerra Mundial"],
+    keyEvents: [
+      { year:"1936", name:"Leyes de Nuremberg", desc:"El régimen nazi institucionaliza la discriminación racial y la exclusión social, consolidando el Estado totalitario." },
+      { year:"1934", name:"Larga Marcha de Mao", desc:"Retirada estratégica que fortalece el liderazgo de Mao Zedong en China y sienta las bases de la Revolución comunista." },
+      { year:"1937", name:"Gran Purga Soviética", desc:"Campaña de represión política para eliminar opositores del gobierno de Stalin. Debilita al ejército rojo." },
+      { year:"1939", name:"Invasión a Polonia", desc:"Expansión territorial alemana que inicia la Segunda Guerra Mundial en Europa, poniendo fin al período de entreguerras." }
+    ],
+    theories: ["Nazismo (ideología de Adolf Hitler)","Racismo científico y Estado totalitario","Maoísmo (adaptación campesina del marxismo)","Fortalecimiento del Realismo político"]
+  },
+  "1940": {
+    title: "Guerra Total y Nuevo Orden",
+    events: ["Pearl Harbour (1941)","Proyecto Manhattan (1942–1945)","Bombas de Hiroshima y Nagasaki (1945)","Fundación de la ONU (1945)","Conferencias de Yalta y Potsdam (1945)","Plan Marshall (1947)","Bloqueo de Berlín (1948)","Creación de la OTAN (1949)"],
+    keyEvents: [
+      { year:"1941", name:"Pearl Harbour", desc:"Ataque japonés a base estadounidense que amplía el conflicto a escala mundial e incorpora a EE. UU. plenamente a la guerra." },
+      { year:"1945", name:"Hiroshima y Nagasaki", desc:"Uso de armas nucleares acelera el fin de la guerra en Asia y abre la era atómica — redefine la naturaleza del poder y la guerra." },
+      { year:"1945", name:"Fundación de la ONU", desc:"Se crea la Organización de Naciones Unidas para mantener la paz internacional. Intento de institucionalizar la seguridad colectiva." },
+      { year:"1945", name:"Yalta y Potsdam", desc:"El diseño del orden de posguerra. Las grandes potencias dividen el mundo en esferas de influencia, prefigurando la Guerra Fría." },
+      { year:"1947", name:"Plan Marshall", desc:"Programa de ayuda económica para reconstruir Europa occidental. Herramienta de influencia geopolítica y contención del comunismo." },
+      { year:"1949", name:"Creación de la OTAN", desc:"Alianza militar occidental para contener la expansión soviética. El modelo de las alianzas militares colectivas de la Guerra Fría." }
+    ],
+    theories: ["Realismo clásico (Hans Morgenthau)","Liberalismo institucional → ONU","Doctrina de contención — inicio Guerra Fría","Consolidación del Estado de bienestar en Occidente"]
+  },
+  "1950": {
+    title: "Bipolaridad y Guerra Fría",
+    events: ["Guerra de Corea (1950–1953)","Inicio de la Guerra de Vietnam (1955)","Revolución Cubana (1953–1959)","Pacto de Varsovia (1955)","Lanzamiento del Sputnik (1957)"],
+    keyEvents: [
+      { year:"1950–53", name:"Guerra de Corea", desc:"Conflicto ideológico que divide permanentemente la península en dos sistemas opuestos. Primera guerra caliente de la Guerra Fría." },
+      { year:"1953–59", name:"Revolución Cubana", desc:"Movimiento guerrillero establece un gobierno socialista en Cuba. Proyecta la Guerra Fría al patio trasero de EE. UU." },
+      { year:"1955", name:"Pacto de Varsovia", desc:"Alianza militar del bloque socialista liderado por la URSS, como respuesta directa a la OTAN. Bipolaridad institucionalizada." },
+      { year:"1957", name:"Sputnik", desc:"Primer satélite artificial inicia la carrera espacial entre superpotencias — competencia tecnológica e ideológica a escala planetaria." }
+    ],
+    theories: ["Bipolaridad (EE. UU. vs. URSS)","Teoría de la contención (George F. Kennan)","Socialismo revolucionario latinoamericano","Carrera espacial como competencia ideológica"]
+  },
+  "1960": {
+    title: "Tensión Nuclear y Cambio Social",
+    events: ["Muro de Berlín (1961)","Crisis de los Misiles en Cuba (1962)","Asesinato de JFK (1963)","Llegada a la Luna (1969)"],
+    keyEvents: [
+      { year:"1961", name:"Muro de Berlín", desc:"Barrera física que simboliza la división ideológica del mundo en dos bloques. Expresión material de la Guerra Fría." },
+      { year:"1962", name:"Crisis de los Misiles", desc:"El punto más cercano a una guerra nuclear total. Enfrentamiento indirecto entre EE. UU. y la URSS por misiles soviéticos en Cuba." },
+      { year:"1963", name:"Asesinato de JFK", desc:"Magnicidio que genera crisis política y conmoción social en EE. UU., marcando el fin del optimismo de posguerra." },
+      { year:"1969", name:"Llegada a la Luna", desc:"Logro científico y triunfo simbólico en la competencia espacial. EE. UU. gana la carrera más visible de la Guerra Fría." }
+    ],
+    theories: ["Destrucción Mutua Asegurada (MAD)","Teoría de la dependencia (América Latina)","Movimientos de derechos civiles y nuevas izquierdas"]
+  },
+  "1970": {
+    title: "Détente, Crisis y Revolución",
+    events: ["Tratados de No Proliferación Nuclear (1970)","Reconocimiento de la República Popular China (1971)","Fin de la Guerra de Vietnam (1975)","Fin del Proyecto MK Ultra (1972)","Revolución Iraní (1979)","Invasión soviética a Afganistán (1979)"],
+    keyEvents: [
+      { year:"1971", name:"Reconocimiento de China", desc:"China se integra plenamente al sistema internacional. Kissinger y Nixon redefinen la geopolítica triangular de la Guerra Fría." },
+      { year:"1975", name:"Fin de la Guerra de Vietnam", desc:"Triunfo del norte comunista y reunificación del país. EE. UU. sufre su primera derrota militar en la era bipolar." },
+      { year:"1979", name:"Revolución Iraní", desc:"Movimiento popular derroca la monarquía y crea un Estado islámico. El islam político emerge como nueva fuerza geopolítica." },
+      { year:"1979", name:"Invasión soviética a Afganistán", desc:"Intervención militar que prolonga tensiones de la Guerra Fría y anticipa el inicio del declive de la URSS." }
+    ],
+    theories: ["Islamismo político (Ruhollah Khomeini)","Neorrealismo (Kenneth Waltz, 1979)","Crisis del modelo keynesiano → bases del neoliberalismo"]
+  },
+  "1980": {
+    title: "Neoliberalismo y Fin del Socialismo Real",
+    events: ["Incidente de Chernóbil (1986)","Glasnost y Perestroika (1987)","Masacre de Tiananmen (1989)","Irangate (1986)","Caída del Muro de Berlín (1989)"],
+    keyEvents: [
+      { year:"1986", name:"Chernóbil", desc:"Accidente nuclear que evidencia fallas sistémicas del modelo soviético y genera una crisis de credibilidad internacional." },
+      { year:"1987", name:"Glasnost y Perestroika", desc:"Reformas políticas y económicas de Gorbachov que buscan modernizar la URSS — inadvertidamente aceleran su colapso." },
+      { year:"1989", name:"Caída del Muro de Berlín", desc:"Colapso del bloque socialista en Europa oriental. Fin simbólico de la Guerra Fría y del orden bipolar de posguerra." },
+      { year:"1989", name:"Masacre de Tiananmen", desc:"Represión estatal de protestas prodemocracia en Pekín. China elige la modernización económica sin liberalización política." }
+    ],
+    theories: ["Neoliberalismo (Reagan y Thatcher)","Reformismo socialista (Gorbachov)","Debate sobre el fin de las ideologías"]
+  },
+  "1990": {
+    title: "Unipolaridad y Globalización",
+    events: ["Unificación de Alemania (1990)","Fin de la URSS (1991)","Fin del Apartheid (1991)","Genocidio en Ruanda (1994)","START II (1993)","Creación de la OMC (1995)","Tratado de Maastricht → Unión Europea (1992)"],
+    keyEvents: [
+      { year:"1991", name:"Fin de la URSS", desc:"Desaparece el principal bloque socialista y cambia el orden mundial. EE. UU. emerge como única superpotencia — la 'Unipolaridad'." },
+      { year:"1991", name:"Fin del Apartheid", desc:"Termina la segregación racial institucional en Sudáfrica. Triunfo del liberalismo democrático y los derechos humanos como norma global." },
+      { year:"1992", name:"Tratado de Maastricht", desc:"Creación de la Unión Europea como el modelo máximo de integración regional supranacional en la historia." },
+      { year:"1994", name:"Genocidio en Ruanda", desc:"El fracaso de la comunidad internacional ante el genocidio. Origen del debate sobre la 'Responsabilidad de Proteger' (R2P)." },
+      { year:"1995", name:"Creación de la OMC", desc:"El triunfo de la globalización neoliberal. El libre comercio multilateral como nueva arquitectura del orden económico." }
+    ],
+    theories: ["'Fin de la Historia' (Francis Fukuyama)","'Choque de Civilizaciones' (Samuel Huntington)","Expansión del liberalismo democrático"]
+  },
+  "2000": {
+    title: "Terrorismo Global y Crisis del Orden Liberal",
+    events: ["Atentados del 11 de Septiembre (2001)","Invasión de Irak (2003)","Expansión de la UE (2004)","Crisis Financiera Global (2008)"],
+    keyEvents: [
+      { year:"2001", name:"Atentados del 11-S", desc:"Ataques terroristas en EE. UU. provocan la 'guerra contra el terrorismo' global. Redefinen soberanía, seguridad y libertades civiles." },
+      { year:"2003", name:"Invasión de Irak", desc:"EE. UU. interviene alegando armas de destrucción masiva. Cuestiona la legitimidad del Consejo de Seguridad y el derecho internacional." },
+      { year:"2004", name:"Expansión de la UE", desc:"La Unión Europea incorpora países de Europa del Este y amplía su influencia — el mayor proyecto de integración en la historia." },
+      { year:"2008", name:"Crisis Financiera Global", desc:"Colapso del sistema hipotecario en EE. UU. desencadena recesión económica mundial. Ascenso del G20 como nuevo foro de gobernanza." }
+    ],
+    theories: ["Doctrina de guerra preventiva (George W. Bush)","Neoconservadurismo","Críticas al neoliberalismo tras la crisis de 2008"]
+  },
+  "2010": {
+    title: "Populismo, Redes y Fractura del Orden",
+    events: ["Primavera Árabe (2010–2012)","Guerra en Siria y surgimiento de ISIS (2011)","Brexit — salida del Reino Unido de la UE (2016)","Victoria de Trump (2016)","Guerra comercial EE. UU.–China (2018–2020)"],
+    keyEvents: [
+      { year:"2010–12", name:"Primavera Árabe", desc:"Protestas masivas derriban gobiernos en Medio Oriente y Norte de África. Las redes sociales como nueva herramienta de poder político." },
+      { year:"2011", name:"Guerra en Siria e ISIS", desc:"Guerra civil prolongada permite la expansión del califato yihadista. Crisis humanitaria y de refugiados de escala global." },
+      { year:"2016", name:"Brexit y Victoria de Trump", desc:"Referéndum y elección que marcan el auge del neopopulismo y el rechazo a la globalización. Crisis del orden liberal internacional." },
+      { year:"2018–20", name:"Guerra Comercial EE.UU.–China", desc:"Disputa por aranceles y tecnología que reordena el comercio global y anuncia la competencia sistémica entre potencias." }
+    ],
+    theories: ["Crisis del liberalismo democrático","Auge del populismo nacionalista","Debate sobre Estados fallidos y terrorismo global"]
+  },
+  "2020": {
+    title: "Pandemia, Guerra y Multipolaridad",
+    events: ["Pandemia de COVID-19 (2020)","Invasión rusa a Ucrania (2022)","Conflicto Israel–Hamas (2023)"],
+    keyEvents: [
+      { year:"2020", name:"Pandemia de COVID-19", desc:"Crisis sanitaria global que paraliza economías y transforma la vida social. La mayor prueba de cooperación internacional del siglo XXI." },
+      { year:"2022", name:"Invasión Rusa a Ucrania", desc:"Rusia lanza ofensiva a gran escala contra Ucrania, reactivando tensiones geopolíticas y desafiando el orden basado en reglas post-1945." },
+      { year:"2023", name:"Conflicto Israel–Hamas", desc:"Escalada de violencia en Israel y Gaza tras ataques y ofensiva militar. Reaviva debates sobre derecho internacional humanitario y soberanía." }
+    ],
+    theories: ["Neomercantilismo — proteccionismo económico","Retorno al realismo geopolítico","Debate sobre multipolaridad (EE. UU., China, Rusia)","Revalorización del Estado fuerte post-pandemia"]
+  }
+};
+
+const DEC_POSITIONS = {
+  "1900":0.02,"1910":0.10,"1920":0.18,"1930":0.26,"1940":0.34,
+  "1950":0.42,"1960":0.50,"1970":0.58,"1980":0.66,"1990":0.74,
+  "2000":0.82,"2010":0.90,"2020":0.98
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  CANVAS — light adapted for light background (amber/gold tones)
+// ═══════════════════════════════════════════════════════════════════
+const cvs = document.getElementById('c');
+const ctx = cvs.getContext('2d');
+let W, H;
+function resize(){ W=cvs.width=window.innerWidth; H=cvs.height=window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const cursorEl = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursorEl.style.left = e.clientX+'px';
+  cursorEl.style.top  = e.clientY+'px';
+});
+
+// DOM refs
+const railFill       = document.getElementById('railFill');
+const railHead       = document.getElementById('railHead');
+const progNum        = document.getElementById('progNum');
+const hTitle         = document.getElementById('hTitle');
+const hSub           = document.getElementById('hSub');
+const mainHeader     = document.getElementById('mainHeader');
+const stLabel        = document.getElementById('stateLabel');
+const btnReset       = document.getElementById('btnReset');
+const startOvl       = document.getElementById('startOverlay');
+const dripDrop       = document.getElementById('dripDrop');
+const refsPanel      = document.getElementById('refsPanel');
+const refsDragHandle = document.getElementById('refsDragHandle');
+const refsDragTab    = document.getElementById('refsDragTab');
+const detailPanel    = document.getElementById('detailPanel');
+const panelBody      = document.getElementById('panelBody');
+const panelClose     = document.getElementById('panelClose');
+const panelBackdrop  = document.getElementById('panelBackdrop');
+const railHint       = document.getElementById('railHint');
+const decadeNodes    = Array.from(document.querySelectorAll('.decade-node'));
+const positions      = decadeNodes.map(n => DEC_POSITIONS[n.dataset.decade]);
+
+// ── Resizable drawer ──
+const PEEK_H = 85, MIN_H = 55;
+let isDragging=false, dragStartY=0, dragStartH=0, currentPanelH=0;
+function setPanelHeight(h){ const maxH=window.innerHeight*0.8; h=Math.max(MIN_H,Math.min(maxH,h)); currentPanelH=h; refsPanel.style.height=h+'px'; }
+function startDrag(e){ if(!refsPanel.classList.contains('open'))return; isDragging=true; dragStartY=e.clientY??(e.touches?.[0]?.clientY||0); dragStartH=refsPanel.getBoundingClientRect().height; document.body.style.cursor='ns-resize'; e.preventDefault(); }
+function onDrag(e){ if(!isDragging)return; const cy=e.clientY??(e.touches?.[0]?.clientY||0); setPanelHeight(dragStartH+(dragStartY-cy)); }
+function endDrag(){ if(!isDragging)return; isDragging=false; document.body.style.cursor=''; if(currentPanelH<=MIN_H+12){ refsPanel.classList.add('opening'); refsPanel.style.height=PEEK_H+'px'; currentPanelH=PEEK_H; setTimeout(()=>refsPanel.classList.remove('opening'),600); } }
+refsDragHandle.addEventListener('mousedown',startDrag);
+refsDragTab.addEventListener('mousedown',startDrag);
+document.addEventListener('mousemove',onDrag);
+document.addEventListener('mouseup',endDrag);
+
+// ── Detail panel ──
+function openPanel(decade){
+  const d=DECADES[decade]; if(!d)return;
+  decadeNodes.forEach(n=>n.classList.remove('active'));
+  const node=decadeNodes.find(n=>n.dataset.decade===decade);
+  if(node)node.classList.add('active');
+  const eventsHTML=d.events.map(e=>`<li>${e}</li>`).join('');
+  const keyHTML=d.keyEvents.map((ke,i)=>`
+    <div class="key-event" data-ke="${i}" onclick="toggleKE(this)">
+      <div class="ke-header">
+        <span class="ke-year">${ke.year}</span>
+        <span class="ke-name">${ke.name}</span>
+        <span class="ke-glow"></span>
+        <span class="ke-arrow">›</span>
+      </div>
+      <div class="ke-desc">${ke.desc}</div>
+    </div>`).join('');
+  const theoryHTML=d.theories.map(t=>`<span class="theory-tag">${t}</span>`).join('');
+  panelBody.innerHTML=`
+    <div class="panel-decade">${decade}</div>
+    <div class="panel-decade-title">${d.title}</div>
+    <div class="panel-section-label">Eventos de la Década</div>
+    <ul class="events-list">${eventsHTML}</ul>
+    <div class="panel-section-label">Eventos Clave</div>
+    <div class="key-events">${keyHTML}</div>
+    <div class="panel-section-label">Teorías de RI Vigentes</div>
+    <div class="theory-tags">${theoryHTML}</div>`;
+  detailPanel.classList.add('open');
+  panelBackdrop.classList.add('active');
+}
+function closePanel(){ detailPanel.classList.remove('open'); panelBackdrop.classList.remove('active'); decadeNodes.forEach(n=>n.classList.remove('active')); }
+function toggleKE(el){ const wasOpen=el.classList.contains('open'); document.querySelectorAll('.key-event').forEach(k=>k.classList.remove('open')); if(!wasOpen)el.classList.add('open'); }
+panelClose.addEventListener('click',closePanel);
+panelBackdrop.addEventListener('click',closePanel);
+decadeNodes.forEach(node=>{
+  node.addEventListener('click',()=>{
+    if(!node.classList.contains('revealed'))return;
+    if(detailPanel.classList.contains('open')&&node.classList.contains('active')){ closePanel(); return; }
+    openPanel(node.dataset.decade);
+  });
+});
+
+// ── State machine ──
+let state='idle', fillProgress=0, revealedCount=0;
+let t_orb=0, orbitTimer=0;
+const ORBIT_DURATION=3.2;
+let phases,freqs,amps,lightX=0,lightY=0;
+let descStartX,descStartY,descTargetX,descTargetY,descT=0;
+const FILL_SPEED=0.00038;
+let lastFrame=performance.now();
+
+function randomiseOrbit(){
+  phases=[Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI*2];
+  freqs=[1,1.618,2.414,3.141];
+  amps={x:W*0.36,y:H*0.28};
+}
+function chaoticPos(t){
+  return{x:W/2+amps.x*(0.6*Math.sin(freqs[0]*t+phases[0])+0.4*Math.cos(freqs[1]*t+phases[1])),
+         y:H/2+amps.y*(0.65*Math.cos(freqs[2]*t+phases[2])+0.35*Math.sin(freqs[3]*t+phases[3]))};
+}
+function getRailTarget(){ const rect=document.getElementById('railBg').getBoundingClientRect(); return{x:rect.left,y:rect.top+rect.height/2}; }
+
+// Light drawing — amber/gold on light background (uses multiply-ish dark strokes)
+function drawLight(x,y,r,intensity){
+  ctx.clearRect(0,0,W,H);
+  if(intensity<=0)return;
+  // Wide warm amber haze
+  let g=ctx.createRadialGradient(x,y,0,x,y,r*6);
+  g.addColorStop(0,`rgba(196,154,42,${0.12*intensity})`);
+  g.addColorStop(0.5,`rgba(212,168,60,${0.05*intensity})`);
+  g.addColorStop(1,'rgba(245,240,232,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // Mid glow
+  g=ctx.createRadialGradient(x,y,0,x,y,r*2.2);
+  g.addColorStop(0,`rgba(196,154,42,${0.35*intensity})`);
+  g.addColorStop(0.5,`rgba(212,168,60,${0.12*intensity})`);
+  g.addColorStop(1,'rgba(245,240,232,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // Core bright spot
+  g=ctx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0,`rgba(255,240,180,${intensity})`);
+  g.addColorStop(0.4,`rgba(220,180,80,${0.6*intensity})`);
+  g.addColorStop(1,'rgba(245,240,232,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // Speed streaks during orbit
+  if(state==='orbit'){
+    ctx.save(); ctx.globalAlpha=0.06*intensity; ctx.strokeStyle='rgba(139,105,20,0.5)'; ctx.lineWidth=1;
+    for(let a=0;a<Math.PI*2;a+=Math.PI/5){
+      ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*r*0.4,y+Math.sin(a)*r*0.4); ctx.lineTo(x+Math.cos(a)*r*4,y+Math.sin(a)*r*4); ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
+
+function drawFillHead(progress){
+  ctx.clearRect(0,0,W,H);
+  const rail=document.getElementById('railBg');
+  const rect=rail.getBoundingClientRect();
+  const sx=rect.left, ex=rect.right, my=rect.top+rect.height/2;
+  const cx2=sx+(ex-sx)*progress;
+  const r=80;
+  const g=ctx.createRadialGradient(cx2,my,0,cx2,my,r);
+  g.addColorStop(0,'rgba(196,154,42,0.55)');
+  g.addColorStop(0.3,'rgba(212,168,60,0.22)');
+  g.addColorStop(0.7,'rgba(196,154,42,0.06)');
+  g.addColorStop(1,'rgba(245,240,232,0)');
+  ctx.fillStyle=g; ctx.fillRect(cx2-r,my-r,r*2,r*2);
+  if(progress>0.02){
+    const tg=ctx.createLinearGradient(sx,my,cx2,my);
+    tg.addColorStop(0,'rgba(196,154,42,0)');
+    tg.addColorStop(0.6,'rgba(196,154,42,0.03)');
+    tg.addColorStop(1,'rgba(196,154,42,0.07)');
+    ctx.fillStyle=tg; ctx.fillRect(sx,my-40,cx2-sx,80);
+  }
+}
+
+// Drip
+function triggerDrip(){
+  const rail=document.getElementById('railBg');
+  const rect=rail.getBoundingClientRect();
+  const startX=rect.right, startY=rect.top+rect.height/2;
+  const targetY=window.innerHeight-window.innerHeight*0.38+10;
+  dripDrop.style.left=startX+'px'; dripDrop.style.top=startY+'px';
+  dripDrop.style.opacity='1'; dripDrop.style.transform='translate(-50%,-50%) scaleY(1.5)';
+  const dur=950, t0=performance.now();
+  function animDrip(now){
+    const t=Math.min((now-t0)/dur,1), ease=t*t;
+    const cy=startY+(targetY-startY)*ease;
+    dripDrop.style.top=cy+'px';
+    dripDrop.style.transform=`translate(-50%,-50%) scaleY(${1+ease*1.4}) scaleX(${1-ease*0.18})`;
+    ctx.clearRect(0,0,W,H);
+    const grd=ctx.createLinearGradient(startX,startY,startX,cy);
+    grd.addColorStop(0,'rgba(196,154,42,0)');
+    grd.addColorStop(0.5,'rgba(196,154,42,0.18)');
+    grd.addColorStop(1,'rgba(139,105,20,0.55)');
+    ctx.strokeStyle=grd; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(startX,startY); ctx.lineTo(startX,cy); ctx.stroke();
+    const dg=ctx.createRadialGradient(startX,cy,0,startX,cy,50);
+    dg.addColorStop(0,'rgba(196,154,42,0.5)'); dg.addColorStop(0.4,'rgba(212,168,60,0.2)'); dg.addColorStop(1,'rgba(245,240,232,0)');
+    ctx.fillStyle=dg; ctx.fillRect(startX-50,cy-50,100,100);
+    if(t<1){ requestAnimationFrame(animDrip); return; }
+    dripDrop.style.transition='transform 0.25s ease,opacity 0.35s ease 0.1s';
+    dripDrop.style.transform='translate(-50%,-50%) scaleY(0.35) scaleX(2.2)';
+    dripDrop.style.opacity='0';
+    setTimeout(()=>{ dripDrop.style.transition='none'; },500);
+    let rS=performance.now(), rD=700;
+    const rX=startX, rY=targetY;
+    function animRipple(n2){
+      const rp=Math.min((n2-rS)/rD,1);
+      ctx.clearRect(0,0,W,H);
+      [[0,1],[0.2,0.85],[0.42,0.65]].forEach(([off,maxA])=>{
+        const rp2=Math.min((rp-off)*1.8,1); if(rp2<=0)return;
+        ctx.beginPath(); ctx.arc(rX,rY,rp2*90,0,Math.PI*2);
+        ctx.strokeStyle=`rgba(139,105,20,${(1-rp2)*maxA*0.5})`; ctx.lineWidth=1.5*(1-rp2)+0.5; ctx.stroke();
+      });
+      if(rp<1){ requestAnimationFrame(animRipple); return; }
+      ctx.clearRect(0,0,W,H);
+      refsPanel.classList.add('opening'); refsPanel.classList.add('open');
+      setPanelHeight(PEEK_H);
+      setTimeout(()=>refsPanel.classList.remove('opening'),1100);
+      stLabel.textContent='Fuentes consultadas';
+    }
+    requestAnimationFrame(animRipple);
+  }
+  requestAnimationFrame(animDrip);
+}
+
+// Reset
+function doReset(){
+  state='idle'; fillProgress=0; revealedCount=0; orbitTimer=0; descT=0; t_orb=0; lastFrame=performance.now();
+  railFill.style.width='0%'; railHead.style.left='0%'; railHead.style.opacity='0';
+  progNum.textContent='00'; progNum.classList.remove('lit');
+  hTitle.classList.remove('lit'); hSub.classList.remove('lit'); mainHeader.classList.remove('lit');
+  stLabel.textContent='En espera...'; stLabel.classList.remove('active');
+  decadeNodes.forEach(n=>{ n.classList.remove('revealed'); n.classList.remove('active'); });
+  railFill.style.boxShadow=''; btnReset.classList.remove('visible');
+  refsPanel.classList.remove('open','opening'); refsPanel.style.height='0'; currentPanelH=0;
+  dripDrop.style.opacity='0'; dripDrop.style.transition='none';
+  railHint.classList.remove('visible');
+  closePanel();
+  startOvl.style.display='flex'; startOvl.style.opacity='0';
+  requestAnimationFrame(()=>{ startOvl.style.transition='opacity 0.6s'; startOvl.style.opacity='1'; });
+  ctx.clearRect(0,0,W,H);
+}
+btnReset.addEventListener('click',doReset);
+
+// Start
+startOvl.addEventListener('click',()=>{
+  startOvl.style.opacity='0'; startOvl.style.transition='opacity 0.7s';
+  setTimeout(()=>{ startOvl.style.display='none'; },700);
+  randomiseOrbit(); state='orbit';
+  stLabel.textContent='La luz busca su destino...'; stLabel.classList.add('active');
+});
+
+// Main loop
+function loop(now){
+  requestAnimationFrame(loop);
+  const dt=Math.min(now-lastFrame,50); lastFrame=now;
+  if(state==='idle'){ ctx.clearRect(0,0,W,H); return; }
+  if(state==='orbit'){
+    t_orb+=dt*0.0025; orbitTimer+=dt/1000;
+    const{x,y}=chaoticPos(t_orb); lightX=x; lightY=y;
+    drawLight(x,y,50,1);
+    if(orbitTimer>=ORBIT_DURATION){
+      state='descend'; descStartX=lightX; descStartY=lightY; descT=0;
+      const tgt=getRailTarget(); descTargetX=tgt.x; descTargetY=tgt.y;
+      stLabel.textContent='Descendiendo sobre la historia...';
+    }
+    return;
+  }
+  if(state==='descend'){
+    descT=Math.min(descT+dt*0.0018,1);
+    const e=descT<0.5?4*descT*descT*descT:1-Math.pow(-2*descT+2,3)/2;
+    lightX=descStartX+(descTargetX-descStartX)*e;
+    lightY=descStartY+(descTargetY-descStartY)*e;
+    drawLight(lightX,lightY,50*(1-e*0.6),1);
+    if(descT>=1){
+      state='fill'; stLabel.textContent='Iluminando la historia...';
+      hTitle.classList.add('lit'); hSub.classList.add('lit'); progNum.classList.add('lit');
+      mainHeader.classList.add('lit');
+      railHead.style.opacity='1';
+    }
+    return;
+  }
+  if(state==='fill'){
+    fillProgress=Math.min(fillProgress+dt*FILL_SPEED,1);
+    railFill.style.width=(fillProgress*100)+'%';
+    railHead.style.left=(fillProgress*100)+'%';
+    drawFillHead(fillProgress);
+    let cnt=0;
+    decadeNodes.forEach((n,i)=>{ if(fillProgress>=positions[i]){ n.classList.add('revealed'); cnt++; } });
+    if(cnt!==revealedCount){ revealedCount=cnt; progNum.textContent=String(cnt).padStart(2,'0'); if(cnt===1)railHint.classList.add('visible'); }
+    if(fillProgress>=1){
+      state='done';
+      stLabel.textContent='Historia iluminada — clic en cada década para explorar';
+      railHead.style.opacity='0';
+      railFill.style.boxShadow='0 0 6px rgba(196,154,42,0.8),0 0 18px rgba(139,105,20,0.5),0 0 40px rgba(139,105,20,0.2)';
+      btnReset.classList.add('visible');
+      setTimeout(triggerDrip,700);
+    }
+    return;
+  }
+  if(state==='done'){ ctx.clearRect(0,0,W,H); }
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
